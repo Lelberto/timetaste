@@ -1,6 +1,5 @@
-import { Model, Mongoose } from 'mongoose';
+import { Mongoose } from 'mongoose';
 import createTimerModel, { TimerModel } from '../models/timer-model';
-import createUserModel, { UserInstance } from '../models/user-model';
 import Service from './service';
 import ServiceContainer from './service-container';
 
@@ -11,7 +10,6 @@ import ServiceContainer from './service-container';
  */
 export default class DatabaseService extends Service {
 
-  public readonly users: Model<UserInstance>;
   public readonly timers: TimerModel;
   private readonly mongoose: Mongoose;
 
@@ -23,7 +21,6 @@ export default class DatabaseService extends Service {
   public constructor(container: ServiceContainer) {
     super(container);
     this.mongoose = this.createMongoose();
-    this.users = createUserModel(container, this.mongoose);
     this.timers = createTimerModel(container, this.mongoose);
   }
 
