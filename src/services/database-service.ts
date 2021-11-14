@@ -1,5 +1,5 @@
-import { Model, Mongoose } from 'mongoose';
-import createUserModel, { UserInstance } from '../models/user-model';
+import { Mongoose } from 'mongoose';
+import createTimerModel, { TimerModel } from '../models/timer-model';
 import Service from './service';
 import ServiceContainer from './service-container';
 
@@ -10,7 +10,7 @@ import ServiceContainer from './service-container';
  */
 export default class DatabaseService extends Service {
 
-  public readonly users: Model<UserInstance>;
+  public readonly timers: TimerModel;
   private readonly mongoose: Mongoose;
 
   /**
@@ -21,7 +21,7 @@ export default class DatabaseService extends Service {
   public constructor(container: ServiceContainer) {
     super(container);
     this.mongoose = this.createMongoose();
-    this.users = createUserModel(container, this.mongoose);
+    this.timers = createTimerModel(container, this.mongoose);
   }
 
   /**
@@ -31,10 +31,7 @@ export default class DatabaseService extends Service {
    * @async
    */
   public async connect(url: string): Promise<void> {
-    await this.mongoose.connect(url, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
+    await this.mongoose.connect(url);
   }
 
   /**
@@ -53,7 +50,6 @@ export default class DatabaseService extends Service {
    */
   private createMongoose(): Mongoose {
     const mongoose = new Mongoose();
-    mongoose.set('useCreateIndex', true);
     return mongoose;
   }
 }
